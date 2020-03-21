@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUrlsTable extends Migration
+class ModifyUrlsEncodeTypeColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateUrlsTable extends Migration
      */
     public function up()
     {
-        Schema::create('urls', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('url_path');
-            $table->timestamps();
+        Schema::table('urls', function (Blueprint $table) {
+          $table->string('url_encoded')->nullable()->change();
         });
     }
 
@@ -27,6 +25,8 @@ class CreateUrlsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('urls');
+        Schema::table('urls', function (Blueprint $table) {
+            //
+        });
     }
 }

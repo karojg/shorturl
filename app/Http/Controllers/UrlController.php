@@ -24,7 +24,7 @@ class UrlController extends Controller
 	}
 
 	/**
-	 * Return all the players
+	 * Return all the urls
 	 */
 	public function index() {
 
@@ -37,13 +37,6 @@ class UrlController extends Controller
 	 * Encode the URL
 	 */
 	public function encode(Request $request) {
-		$url_value = $this->url->create([
-			'url_path' => $request->input('url_path')
-		]);
-
-		return $this->url->encode($url_value->id);
-	}
+		return $this->url->get_url($request);
+  }
 }
-
-
-
