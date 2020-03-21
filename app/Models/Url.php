@@ -16,36 +16,34 @@ class Url extends Model
   ];
 
   const ALPHABET = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_';
-	const BASE = 51; // strlen(self::ALPHABET);
+	const BASE = 51;
 
   public function get_url($string) {
-    // Get url
-    // $url_path = $this->create([
-    //   'url' => $string->input('url')
-    // ]);
+    // Get url value and stores it
+    $url_path = $this->create([
+      'url' => $string->input('url')
+    ]);
 
     // Get url id
-    // $url_id = $url_path->id;
-    // // Encodes url
-    // $url_encoded = $this->encode($url_id);
-    // // Gets encoded url
-    // $update_url_encoded = $this->update_url_encode($url_id, $url_encoded);
-    // // Decodes url
-    $url_decode = $this->decode($string);
+    $url_id = $url_path->id;
 
-    return $url_decode;
+    // Encodes url
+    $url_encoded = $this->encode($url_id);
+    // Stores encoded url
+    $url_encoded_storage = $this->update_url_encode($url_id, $url_encoded);
+
+    return $url_encoded;
   }
 
 
-	public static function encode($num) {
+	public function encode($num) {
 		$str = '';
 
+    // while id is still greater than 0 keep iterating to obtain the encoded url
 		while ($num > 0) {
 			$str = self::ALPHABET[($num % self::BASE)] . $str;
 			$num = (int) ($num / self::BASE);
     }
-
-    update_url_encode($num, $str);
 
 		return $str;
   }
@@ -55,22 +53,11 @@ class Url extends Model
     $url = $this->find($url_id);
 
     // Return error if not found
-    if (empty($url)) {
-      return "No data found.";
-    }
+    if (empty($url)) return "No data found to update.";
 
+    // Updates the encoded_url attribute
     $url->update(['url_encoded' => $url_encoded]);
+
+    return $url;
   }
-
-
-	public static function decode($str) {
-		$num = 0;
-		$len = strlen($str);
-
-		for ($i = 0; $i < $len; $i++) {
-			$num = $num * self::BASE + strpos(self::ALPHABET, $str[$i]);
-		}
-
-    return $num;
-	}
 }
