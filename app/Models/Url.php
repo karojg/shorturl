@@ -16,10 +16,10 @@ class Url extends Model
   ];
 
   const ALPHABET = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_';
-	const BASE = 51;
+	const BASE = 51; // strlen(self::ALPHABET);
 
   public function get_url($string) {
-    // Get url value and stores it
+    // Get url and stores it
     $url_path = $this->create([
       'url' => $string->input('url')
     ]);
