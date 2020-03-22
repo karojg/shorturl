@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Models\Url;
-use App\Services\UrlPopo;
 use Illuminate\Http\Request;
 
 class UrlController extends Controller
@@ -18,24 +17,20 @@ class UrlController extends Controller
 	*
 	* @return void
 	*/
-	public function __construct(Url $url, UrlPopo $urlpopo, Request $request)
+	public function __construct(Url $url, Request $request)
 	{
     $this->model = $url;
-    $this->popo = $urlpopo;
     $this->request = $request;
   }
 
 	/**
-	 * Return all the urls
+	 * Inits the encode process
 	 */
   public function encode()
   {
-    // Popo
-    $popoReturn = $this->popo->getEncodedUrls($this->request);
+    // Call the Model, that will call the Service
+    $urlModel = $this->model->service_call($this->request);
 
-    // Model
-    $modelReturn = $this->model->get_url($popoReturn);
-
-    return $modelReturn;
+    return $urlModel;
   }
 }

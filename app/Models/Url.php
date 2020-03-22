@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\ServiceUrlShortener;
 
 class Url extends Model
 {
@@ -15,49 +16,44 @@ class Url extends Model
     'url_encoded'
   ];
 
-  const ALPHABET = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_';
-	const BASE = 51; // strlen(self::ALPHABET);
+  /**
+	 * Executes the call between the model and service
+	 */
+  public function service_call($string)
+  {
+    // ServiceUrlShortener Service Instance
+    $service = new ServiceUrlShortener;
+    // Returns the url id at the DB
+    $url_id = $this->store_url($string);
+    // Returns the encoded url
+    $encodes_url = $service->encode($url_id);
+    // Stores the encoded url
+    $stored_encoded_url = $this->store_encoded_url($url_id, $encodes_url);
 
-  public function get_url($string) {
+    return $encodes_url;
+  }
+
+  /**
+	* Stores the url and returns its id
+	*/
+  public function store_url($string)
+  {
     // Get url and stores it
-    $url_path = $this->create([
+    $stored_url = $this->create([
       'url' => $string->input('url')
     ]);
 
-    // Get url id
-    $url_id = $url_path->id;
-
-    // Encodes url
-    $url_encoded = $this->encode($url_id);
-    // Stores encoded url
-    $url_encoded_storage = $this->update_url_encode($url_id, $url_encoded);
-
-    return $url_encoded;
+    return $stored_url->id;
   }
 
-
-	public function encode($num) {
-		$str = '';
-
-    // while id is still greater than 0 keep iterating to obtain the encoded url
-		while ($num > 0) {
-			$str = self::ALPHABET[($num % self::BASE)] . $str;
-			$num = (int) ($num / self::BASE);
-    }
-
-		return $str;
-  }
-
-  public function update_url_encode($url_id, $url_encoded) {
-    // Find the url you want to update
+  /**
+	* Stores the encoded url
+	*/
+  public function store_encoded_url($url_id, $url_encoded)
+  {
+    // Finds position where to store the $url_encoded
     $url = $this->find($url_id);
-
-    // Return error if not found
-    if (empty($url)) return "No data found to update.";
-
     // Updates the encoded_url attribute
     $url->update(['url_encoded' => $url_encoded]);
-
-    return $url;
   }
 }
