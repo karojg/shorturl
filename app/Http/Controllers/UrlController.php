@@ -29,7 +29,7 @@ class UrlController extends Controller
   public function encode()
   {
     // Call the Model, that will call the Service
-    $urlModel = $this->model->service_call($this->request);
+    $urlModel = $this->model->encode_url($this->request);
 
     // Return a json APP url and the encoded url
     $local = env('APP_URL');

@@ -19,7 +19,7 @@ class Url extends Model
   /**
 	 * Executes the call between the model and service
 	 */
-  public function service_call($string)
+  public function encode_url($string)
   {
     // ServiceUrlShortener Service Instance
     $service = new ServiceUrlShortener;
