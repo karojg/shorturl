@@ -31,6 +31,10 @@ class UrlController extends Controller
     // Call the Model, that will call the Service
     $urlModel = $this->model->service_call($this->request);
 
-    return $urlModel;
+    // Return a json APP url and the encoded url
+    $local = env('APP_URL');
+    return response()->json([
+      'encoded_url' => $local . $urlModel,
+    ]);
   }
 }
