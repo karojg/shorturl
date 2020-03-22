@@ -14,6 +14,5 @@
 $router->group([
     'prefix' => 'api/v1',
 ], function () use ($router){
-    $router->get('/urls', 'UrlController@index');
     $router->post('/encode', 'UrlController@encode');
 });
