@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-use App\Services\ServiceUrlShortener;
+use App\Services\SingletonUrlShortner;
 
 class Url extends Model
 {
@@ -22,7 +22,9 @@ class Url extends Model
   public function encode_url($string)
   {
     // ServiceUrlShortener Service Instance
-    $service = new ServiceUrlShortener;
+    $instanceService = SingletonUrlShortner::get_instance();
+    $service = $instanceService->get_service();
+    
     // Returns the url id at the DB
     $url_id = $this->store_url($string);
     // Returns the encoded url

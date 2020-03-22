@@ -6,7 +6,7 @@ class ServiceUrlShortener
 {
 
   const ALPHABET = '23456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ-_';
-	const BASE = 51; // strlen(self::ALPHABET);
+	const BASE = 51;
 
 	public function encode($num) {
 		$str = '';
